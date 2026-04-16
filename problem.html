@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<title>PyQuest | Level Up Your Python</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pyquest.css') }}">
+
+<script src="https://unpkg.com/monaco-editor@0.44.0/min/vs/loader.js"></script>
+</head>
+
+<body>
+<nav>
+  <a href="/"><h1>PyQuest</h1></a>
+  <div>
+    <a href="/logout">Logout</a>
+  </div>
+</nav>
+<h3>{{problem[1]}}</h3>
+
+<div class="container">
+
+<!-- LEFT SIDE : PROBLEM -->
+
+<div class="problem-section" style="margin-right: 20px;">
+
+<h3>Description</h3>
+
+<p>{{problem[2]}}</p><br>
+<h4>Example Input</h4>
+<pre>{{example[0] | e }}</pre>
+
+<h4>Example Output</h4>
+<pre>{{example[1] | e }}</pre>
+<div style="background:#ffd7009e; border-left:4px solid #ffc107; padding:10px 14px; border-radius:4px; margin:10px 0; font-size:13px;">
+    <strong>💡 Input Tip:</strong> Use <code>input()</code> without prompt strings.<br>
+    Each <code>input()</code> call reads one line from the <em>Custom Input</em> box.<br>
+    <strong>Example:</strong> For two numbers, enter them on separate lines:
+    <pre style="margin:6px 0 0 0; background:#ffeeba; padding:6px; border-radius:3px;color:black">5
+3</pre>
+</div>
+<h3>Output</h3>
+
+<pre id="output-box" style="text-wrap:auto;overflow-y:auto;overflow-x: auto;max-height: 200px;scrollbar-width: none;"></pre>
+<div id="test-results"></div>
+</div>
+
+
+<!-- RIGHT SIDE : CODE EDITOR -->
+
+<div class="editor-section">
+
+<form action="/submit/{{problem[0]}}" method="POST" onsubmit="syncCode()">
+
+<div id="editor" style="width:100%; height:350px; border:1px solid #ccc;"></div>
+
+<input type="hidden" id="code" name="code">
+<h3>Custom Input</h3>
+<textarea id="user-input"></textarea>
+<br>
+
+<button type="button" onclick="runCode()" class="btn primary">Run Code</button>
+
+<button type="button" onclick="submitCode()" class="btn primary">Submit</button>
+<a href="/dashboard"><button type="button" onclick="backToDashboard()" class="btn secondary">Back to Dashboard</button></a>
+</form>
+
+<!-- <h3>Output</h3>
+
+<pre id="output-box"></pre> -->
+
+</div>
+
+</div>
+
+
+<script>
+let editor;
+
+require.config({ paths: { vs: 'https://unpkg.com/monaco-editor@0.44.0/min/vs' }});
+
+require(['vs/editor/editor.main'], function () {
+    editor = monaco.editor.create(document.getElementById('editor'), {
+        value: `{{problem[3] if problem[3] else "# Start coding..."}}`,
+        language: "python",
+        theme: "vs-dark",
+        automaticLayout: true
+    });
+
+    const fmt = editor.getAction('editor.action.formatDocument');
+    if (fmt) fmt.run();
+    monaco.languages.registerCompletionItemProvider('python', {
+    provideCompletionItems: () => {
+        return {
+            suggestions: [
+                {
+                    label: 'print',
+                    kind: monaco.languages.CompletionItemKind.Function,
+                    insertText: 'print(${1})'
+                }
+            ]
+        };
+    }
+});
+});
+
+
+
+function syncCode() {
+    document.getElementById("code").value = editor.getValue();
+}
+
+function backToDashboard() {
+    window.location.href = "/dashboard";
+}
+
+function runCode() {
+    let input_data = document.getElementById("user-input").value;
+
+    fetch("/run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            code: editor.getValue(),
+            input: input_data
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("output-box").textContent = data.output || data.error;
+        if (data.error) {
+            showErrors(data.error);
+        }
+    });
+}
+
+function showErrors(errorText) {
+    if (!errorText) return;
+
+    monaco.editor.setModelMarkers(editor.getModel(), "owner", [{
+        startLineNumber: 1,
+        startColumn: 1,
+        endLineNumber: 1,
+        endColumn: 1,
+        message: errorText,
+        severity: monaco.MarkerSeverity.Error
+    }]);
+}
+function submitCode() {
+     syncCode();
+
+    fetch("/submit/{{problem[0]}}", {
+        method: "POST",
+        body: new FormData(document.querySelector("form"))
+    })
+    .then(res => res.json())
+    .then(results => {
+        let html = "";
+
+        results.forEach((tc, i) => {
+            html += `
+                <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+                    <h4>Test Case ${i+1} - 
+                        <span style="color:${tc.passed ? 'green' : 'red'}">
+                            ${tc.passed ? 'PASS ✅' : 'FAIL ❌'}
+                        </span>
+                    </h4>
+                    <pre>Input:\n${tc.input}</pre>
+                    <pre>Expected:\n${tc.expected}</pre>
+                    <pre>Your Output:\n${tc.output}</pre>
+                </div>
+            `;
+        });
+
+        document.getElementById("test-results").innerHTML = html;
+    });
+}
+
+</script>
+</body>
+</html>

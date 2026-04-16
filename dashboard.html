@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+    <style>
+       :root{
+  --bg-dark:#0f1020;
+  --purple:#8b5cf6;
+  --coral:#ff3d81;
+  --blue:#00d4ff;
+  --text:#e2e8f0;
+}
+ 
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+ 
+body{
+  background: radial-gradient(circle at 20% 30%, rgba(139,92,246,.3), transparent 40%),
+              radial-gradient(circle at 80% 70%, rgba(255,61,129,.25), transparent 40%),
+              var(--bg-dark);
+  color:var(--text);
+  overflow-x:hidden;
+}
+ 
+
+        .container {
+            width: 90%;
+            margin: auto;
+            padding-top: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        /* Streak */
+        .streak {
+            font-size: 24px;
+            color: orange;
+        }
+
+        /* Badge */
+        .badge {
+            background: #334155;
+            padding: 8px;
+            margin: 5px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        /* Button */
+        .btn {
+           padding:10px 25px;
+  border-radius:30px;
+  border:none;
+  font-size:1rem;
+  font-weight:600;
+  margin:10px;cursor: pointer;
+  transition:.3s;
+  background:linear-gradient(90deg,var(--purple),var(--coral));
+  color:white;
+  box-shadow:0 0 25px rgba(255,61,129,.5);
+        }
+
+        .btn:hover {
+            transform:translateY(-3px);
+  box-shadow:0 0 35px rgba(255,61,129,.8);
+        }
+
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+              /* Navbar */
+              nav {
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                padding:20px 60px;
+                backdrop-filter:blur(10px);
+                background:rgba(15,16,32,.6);
+                position: sticky;top: 0;z-index: 1;
+              }
+              
+              nav h1{
+                font-size:1.6rem;
+                background:linear-gradient(90deg,var(--purple),var(--blue));
+                -webkit-background-clip:text;
+                -webkit-text-fill-color:transparent;
+              }
+              
+              nav a{
+                text-decoration:none;
+                color:var(--text);
+                margin-left:30px;
+                transition:.3s;
+              }
+              
+              nav a:hover{
+                color:var(--coral);
+              }
+ footer{
+  text-align:center;
+  padding:40px;
+  opacity:.6;
+}
+.xp-bar {
+    width: 100%;
+    height: 12px;
+    background: #334155;
+    border-radius: 10px;
+    overflow: hidden;
+}
+hr{
+    border: none;
+    border-top: 1px solid #334155;
+}
+.xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e, #4ade80);
+    transition: width 0.5s ease-in-out;
+}
+/* Locked badge */
+.badge.locked {
+    background-color: #ccc;
+    color: #777;
+    filter: grayscale(100%);
+    opacity: 0.6;
+}
+    </style>
+      {{ toastr.include_jquery() }}
+    {{ toastr.include_toastr_css() }}
+    {{ toastr.message() }}
+</head>
+
+<body>
+<nav>
+  <a href="/"><h1>PyQuest</h1></a>
+  <div>
+        <a href="/logout">Logout</a>
+  </div>
+</nav>
+  {{ toastr.include_toastr_js() }}
+<div class="container">
+     <h1>🚀 Welcome Back, {{ name }} 🎮 </h1>
+  <div style="text-align: right;padding: 10px;font-size: large;">
+        <a href="/leaderboard">🏆 Ranking</a>
+    </div>
+  
+    <div class="grid">
+
+        <!-- XP -->
+        <div class="card">
+            <div class="title">⭐ Level {{ level }}</div><hr><br>
+            <p>{{ current_level_xp }} / 100 XP</p>
+            <br>
+            <div class="xp-bar">
+                <div class="xp-fill" style="width: {{ progress }}%"></div>
+            </div>
+        </div>
+
+        <!-- Streak -->
+        <div class="card">
+            <div class="title">🔥 Streak</div><hr><br>
+            <div class="streak">{{ streak }} days</div>
+        </div>
+
+        <!-- Daily Challenge -->
+        <div class="card">
+            <div class="title">🎯 Daily Challenge</div><hr><br>
+             {% if challenge %}
+        <p><strong>{{ challenge[1] }}</strong></p>
+
+        {% if completed %}
+            <p style="color:#22c55e;">✅ Completed</p>
+        {% else %}
+            <a href="/problem/{{ challenge[2] }}">
+                <button class="btn">Start</button>
+            </a>
+        {% endif %}
+
+    {% else %}
+        <p>No daily challenge available today</p>
+    {% endif %}
+           <!-- <a href="/start"><button class="btn">Start</button></a> -->
+        </div>
+<div class="card">
+    <div class="title">🚀 Practice</div><hr>
+    <a href="/start">
+        <button class="btn">Start Coding</button>
+    </a>
+</div>
+    </div>
+
+    <!-- Badges -->
+    <div class="card" style="margin-top:20px;">
+        <div class="title">🏆 Badges</div><hr>
+
+       {% if badges %}
+  {% for badge, unlocked in badges %}
+    
+    <div class="badge {% if not unlocked %}locked{% endif %}" style="background-color: {{ loop.cycle('#ff5733', '#33ff57', '#3357ff', '#f333ff') }};color:white; margin:5px; display:inline-block; padding:10px 15px; border-radius:8px;">
+         {% if not unlocked %} 🔒 {% endif %}
+        {{ badge }}
+    </div>
+
+  {% endfor %}
+{% else %}
+  <span class="no-badges">No badges earned yet</span>
+{% endif %}
+       
+    </div>
+
+    <!-- Navigation -->
+    
+</div>
+
+<footer>
+  © 2026 PyQuest — Cyber Learning Arcade
+</footer>
+</body>
+</html>

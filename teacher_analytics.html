@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard | PyQuest</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pyquest.css') }}">
+
+</head>
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+
+<nav>
+  <a href="/"><h1>PyQuest</h1></a>
+  <div>
+        <a href="/logout">Logout</a>
+  </div>
+</nav>
+{% set usr_name = session["user"].capitalize() %}
+<section class="dashboard">
+   <h2>Problem Analytics</h2>
+
+<table class="styled-table" style="width: 70%; margin: auto;">
+
+<tr>
+<th>Problem</th>
+<th>Students Attempted</th>
+<th>Successful Submissions</th>
+</tr>
+
+{% for row in data %}
+<tr>
+<td>{{row[0]}}</td>
+<td>{{row[1]}}</td>
+<td>{{row[2]}}</td>
+</tr>
+{% endfor %}
+
+</table>
+<a href="/teacher"><button type="button" class="btn secondary">Back</button></a>
+
+</section>
+
+<footer>
+  © 2026 PyQuest — Cyber Learning Arcade
+</footer>
+
+</body>
+</html>

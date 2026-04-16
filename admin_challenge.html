@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PyQuest | Level Up Your Python</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pyquest.css') }}">
+<script>
+function toggleForm(){
+  const login = document.getElementById("loginForm");
+  const register = document.getElementById("registerForm");
+  const errorMsg = document.getElementById("error_msg");
+  if(login.style.display === "none"){
+    login.style.display = "block";
+    register.style.display = "none";
+  } else {
+    login.style.display = "none";
+    register.style.display = "block";
+    setError(""); // clear error
+  }
+}
+function setError(message) {
+  const errorMsg = document.getElementById("error_msg");
+  if (!errorMsg) return; // If error message element doesn't exist, do nothing
+  errorMsg.textContent = message;
+}
+</script>
+ {{ toastr.include_jquery() }}
+    {{ toastr.include_toastr_css() }}
+    {{ toastr.message() }}
+</head>
+ 
+<body>
+ 
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+ 
+<nav>
+   <h1><a href="/">PyQuest</a></h1>
+  <div>
+    <!-- <a href="#">Features</a> -->
+      <a href="/logout">Logout</a>
+  </div>
+</nav>
+  {{ toastr.include_toastr_js() }}
+<section class="auth-container">
+  <div class="auth-box" style="width: 500px;">
+
+    <h2 style="-webkit-text-fill-color: unset; color:rgb(34, 201, 28)">🎯Set Daily Challenge</h2>
+
+        {% if today_challenge %}
+        <div class="input-group">
+            <strong>Today's Challenge:</strong><br>
+            {{ today_challenge[0] }} (Problem ID: {{ today_challenge[1] }})
+  <hr>
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            <div class="input-group">
+            <label>Challenge Title</label>
+            <input type="text" style="width: 100%;" name="title" placeholder="e.g. Two Sum Challenge" required>
+            </div>
+            <div class="input-group">
+            <label>Select Problem</label>
+            <select name="problem_id">
+                {% for p in problems %}
+                    <option value="{{ p[0] }}">{{ p[1] }} (ID: {{ p[0] }})</option>
+                {% endfor %}
+            </select>
+            </div>
+            <button class="btn primary" style="width:100%;" type="submit">Set Challenge</button>
+            <button class="btn primary" style="width:100%;" onclick="window.location.href='/admin'">Back to Dashboard</button>
+        </form>
+
+
+
+  </div>
+</section>
+ 
+<footer>
+  © 2026 PyQuest — Cyber Learning Arcade
+</footer>
+ 
+</body>
+</html>

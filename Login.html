@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PyQuest | Level Up Your Python</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pyquest.css') }}">
+<script>
+function toggleForm(){
+  const login = document.getElementById("loginForm");
+  const register = document.getElementById("registerForm");
+  const errorMsg = document.getElementById("error_msg");
+  if(login.style.display === "none"){
+    login.style.display = "block";
+    register.style.display = "none";
+  } else {
+    login.style.display = "none";
+    register.style.display = "block";
+    setError(""); // clear error
+  }
+}
+function setError(message) {
+  const errorMsg = document.getElementById("error_msg");
+  if (!errorMsg) return; // If error message element doesn't exist, do nothing
+  errorMsg.textContent = message;
+}
+</script>
+ {{ toastr.include_jquery() }}
+    {{ toastr.include_toastr_css() }}
+    {{ toastr.message() }}
+</head>
+ 
+<body>
+ 
+<nav>
+   <h1><a href="/">PyQuest</a></h1>
+  <div>
+    <!-- <a href="#">Features</a> -->
+  </div>
+</nav>
+ 
+<section class="auth-container">
+  {{ toastr.include_toastr_js() }}
+  <div class="auth-box">
+
+    <!-- Login Form -->
+    <form action="/login" method="POST" id="loginForm">
+      <h2>Login to PyQuest</h2>
+ 
+      <div class="input-group">
+        <label>Email / User Name</label>
+        <input type="text" name="email" required>
+      </div>
+
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" name="password" required>
+      </div>
+
+      <button type="submit" class="btn primary" style="width:100%;">Login</button>
+
+      <div class="toggle-text">
+        Don't have an account? 
+        <a href="{{ url_for('register') }}" style="color: rgb(139, 236, 27);">Register</a>
+      </div>
+      <!-- {% if error %}
+    <p id="error_msg" style="color:red;">{{ error }}</p>
+{% endif %} -->
+    </form>
+
+  </div>
+</section>
+ 
+<footer>
+  © 2026 PyQuest — Cyber Learning Arcade
+</footer>
+ 
+</body>
+</html>

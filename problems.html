@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard | PyQuest</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pyquest.css') }}">
+
+</head>
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+
+<nav>
+  <a href="/"><h1>PyQuest</h1></a>
+  <div>
+    <a href="/logout">Logout</a>
+  </div>
+</nav>
+
+<section class="dashboard">
+     <h2>Available Challenges</h2><br>
+<div class="table-container">
+<table class="styled-table">
+
+<tbody>
+
+{% for p in problems %}
+
+<tr>
+
+<td>{{ loop.index }}: </td>
+<td>{{p[1]}} : {{ p[2][:100] }}</td>
+<td>
+<a href="/problem/{{ p[0] }}">
+<button class="btn primary">Solve</button>
+</a>
+</td>
+
+</tr>
+
+{% endfor %}
+</tbody>
+
+</table></div><br>
+<a href="/dashboard"><button class="btn secondary">Back to Dashboard</button></a>
+</section>
+<footer>
+  © 2026 PyQuest — Cyber Learning Arcade
+</footer>
+</body>
+</html>

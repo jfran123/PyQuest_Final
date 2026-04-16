@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PyQuest | Level Up Your Python</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pyquest.css') }}">
+</head>
+ 
+<body>
+ 
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+ 
+<nav>
+   <a href="/"><h1>PyQuest</h1></a>
+  <div>
+    <!-- <a href="#">Features</a> -->
+    <a href="{{ url_for('login') }}">Login</a>
+  </div>
+</nav>
+ 
+<section class="hero" style="min-height: 2vh;">
+  <h2>Learn Python. Earn XP. Unlock Achievements.</h2>
+  <p>
+    PyQuest gamifies learning Python with beginner coding challenges.
+    Complete missions, earn points, level up, and build real coding skills.
+  </p>
+ 
+  <div>
+   <a href="{{ url_for('login') }}">
+     <button class="btn primary" >Start Your Mission</button>
+   </a >
+    <!-- <button class="btn secondary">View Challenges</button> -->
+  </div>
+</section>
+ 
+<section class="features">
+  <div class="card">
+    <h3>⚡ XP & Levels</h3>
+    <p>Earn experience points for every coding challenge you complete.</p>
+  </div>
+ 
+  <div class="card">
+    <h3>🏆 Achievements</h3>
+    <p>Unlock badges for streaks, milestones, and mastering Python topics.</p>
+  </div>
+ 
+  <div class="card">
+    <h3>🔥 Daily Missions</h3>
+    <p>Stay consistent with daily coding tasks and maintain your streak.</p>
+  </div>
+</section>
+ 
+<footer>
+  © 2026 PyQuest — Cyber Learning Arcade
+</footer>
+ 
+</body>
+</html>

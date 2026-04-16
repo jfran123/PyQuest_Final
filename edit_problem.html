@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard | PyQuest</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pyquest.css') }}">
+
+</head>
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+
+<nav>
+  <h1>PyQuest</h1>
+  <div>
+    <a href="/">Home</a>
+    <a href="/logout">Logout</a>
+  </div>
+</nav>
+
+<section class="dashboard">
+  <h2>Manage Coding Problem</h2>
+
+
+<h2>Edit Problem</h2>
+
+<form method="POST">
+
+<label>Title</label>
+<input type="text" name="title" value="{{problem[1]}}" required>
+
+<label>Description</label>
+<textarea name="description" required>{{problem[2]}}</textarea>
+
+<label>Difficulty</label>
+<select name="difficulty">
+
+<option value="easy" {% if problem[3]=='easy' %}selected{% endif %}>Easy</option>
+<option value="medium" {% if problem[3]=='medium' %}selected{% endif %}>Medium</option>
+<option value="hard" {% if problem[3]=='hard' %}selected{% endif %}>Hard</option>
+
+</select>
+
+<button type="submit" class="btn-update">Update</button>
+
+</form>
+</section> 
+
+<footer>
+  © 2026 PyQuest — Cyber Learning Arcade
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard | PyQuest</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pyquest.css') }}">
+<style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial;
+            background: linear-gradient(135deg, #0f172a, #020617);
+            color: white;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding-top: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .leaderboard {
+            background: #1e293b;
+            border-radius: 16px;
+            overflow: hidden;
+            width: 50%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .header, .row {
+            display: grid;
+            grid-template-columns: 100px 1fr 150px 150px 40px;
+            padding: 15px 20px;
+            align-items: center;
+        }
+
+        .header {
+            background: #334155;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .row {
+            border-bottom: 1px solid #334155;
+            transition: 0.2s;
+        }
+
+        .row:hover {
+            background: #0f172a;
+            transform: scale(1.01);
+        }
+
+        .rank {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .top1 { color: gold; }
+        .top2 { color: silver; }
+        .top3 { color: #cd7f32; }
+
+        .xp {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .level {
+            background: #0ea5e9;
+            padding: 5px 10px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .avatar {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .circle {
+            width: 35px;
+            height: 35px;
+            background: #38bdf8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+
+<nav>
+   <a href="/"><h1>PyQuest</h1></a>
+  <div>
+        <a href="/logout">Logout</a>
+  </div>
+</nav>
+
+<section class="dashboard" style="display: flex; flex-direction: column; align-items: center; padding: 40px 20px; gap: 30px;">
+  <h2>Leaderboard</h2>
+
+  <div class="leaderboard">
+        <div class="header">
+            <div>#</div>
+            <div>User</div>
+            <div>Level</div>
+            <div>XP</div>
+            <div>Badge</div>
+        </div>
+
+        {% for user in users %}
+        <div class="row">
+
+            <!-- Rank -->
+            <div class="rank 
+                {% if loop.index == 1 %}top1{% endif %}
+                {% if loop.index == 2 %}top2{% endif %}
+                {% if loop.index == 3 %}top3{% endif %}
+            ">
+                {{ loop.index }}
+            </div>
+
+            <!-- User -->
+             <!-- highlight the current user : {% if user[0] == session['user'] %} style="background: #1d4ed8;" {% endif %}-->
+            <div class="avatar">
+                <div class="circle">
+                    {{ user[0][0] }}
+                </div>
+                <div>{{ user[0] }}</div>
+            </div>
+
+            <!-- Level -->
+            <div class="level">
+                Lv {{ user[2] }}
+            </div>
+
+            <!-- XP -->
+            <div class="xp">
+                {{ user[1] }} XP
+            </div>
+            <div class="badge">
+              {% if loop.index == 1 %}
+🏆
+{% elif loop.index == 2 %}
+🥈
+{% elif loop.index == 3 %}
+🥉
+{% else %}
+-
+{% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+  </div>
+
+  <div>
+    {% if session.get("role") == "admin" %}
+    <a href="/admin"><button class="btn secondary">Back to Dashboard</button></a>
+    {% else %}
+    <a href="/dashboard"><button class="btn secondary">Back to Dashboard</button></a>
+    {% endif %}
+  </div>
+
+</section>
+
+<!-- <footer>
+  © 2026 PyQuest — Cyber Learning Arcade
+</footer> -->
+
+</body>
+</html>

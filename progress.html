@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Progress</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pyquest.css') }}">
+</head>
+
+<body>
+<nav>
+  <a href="/"><h1>PyQuest</h1></a>
+  <div>
+    <a href="/logout">Logout</a>
+  </div>
+</nav>
+<section class="dashboard">
+<h2>My Coding Progress</h2>
+
+
+
+<br>
+<div class="table-container">
+
+<table class="styled-table" style="width: 50%; margin: auto;">
+
+<thead>
+<tr>
+<th><h3>Summary</h3></th>
+<th><h3>Solved Problems</h3></th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>
+<div>
+
+<p>Total Problems Solved: <b>{{solved}}</b></p>
+
+<p>Total Problems Available: <b>{{total_problems}}</b></p>
+
+<p>Total Submissions: <b>{{total_submissions}}</b></p>
+
+<p style="color: aqua;font-size: larger;"><b>Success Rate: {{success_rate}}%</b></p>
+
+</div>
+</td>
+<td>
+<ul>
+
+{% for p in solved_list %}
+
+<li>{{p[0]}}</li>
+
+{% endfor %}
+
+</ul>
+
+</td>
+
+</tr>
+
+</tbody>
+</table>
+</div>
+<a href="/dashboard"><button class="btn secondary">Back to Dashboard</button></a>
+</section>
+</body>
+</html>
